@@ -2,7 +2,7 @@ import { TixteClient } from "@ultirequiem/tixte";
 import { env } from "@/env";
 
 const tixteClient = new TixteClient(env.TIXTE_API_KEY, {
-  defaultURL: "sergif.likes.cash",
+  defaultDomain: "sergif.likes.cash",
 });
 
 export interface UploadResult {

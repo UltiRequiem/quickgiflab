@@ -1,8 +1,6 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-// @ts-ignore - RecordRTC doesn't have perfect TypeScript definitions
-import RecordRTC, { StereoAudioRecorder } from 'recordrtc';
 
 export interface RecorderState {
   isRecording: boolean;
@@ -23,11 +21,11 @@ export interface RecordingOptions {
 }
 
 const DEFAULT_OPTIONS: RecordingOptions = {
-  width: 1280,
+  width: 1280, // Higher resolution than original (was 360x240)
   height: 720,
-  frameRate: 15, // Lower frame rate for proper GIF timing
-  videoBitsPerSecond: 4000000, // 4 Mbps - good balance
-  gifQuality: 3, // Good quality with proper timing
+  frameRate: 10, // Same as original Sergif
+  videoBitsPerSecond: 2000000,
+  gifQuality: 10, // Same as original Sergif (10 = best quality)
 };
 
 export const useWebcamGifRecorder = (options: Partial<RecordingOptions> = {}) => {
@@ -89,24 +87,17 @@ export const useWebcamGifRecorder = (options: Partial<RecordingOptions> = {}) =>
 
       if (!stream) return;
 
-      // Create RecordRTC instance with proper timing settings
+      // Dynamically import RecordRTC only on client-side
+      const RecordRTC = (await import('recordrtc')).default;
+
+      // Create RecordRTC instance using original Sergif settings (but higher resolution)
       const recorder = new RecordRTC(stream, {
         type: 'gif',
-        frameRate: recordingOptions.frameRate,
-        quality: recordingOptions.gifQuality,
-        width: recordingOptions.width,
-        height: recordingOptions.height,
-        videoBitsPerSecond: recordingOptions.videoBitsPerSecond,
-        // Critical for proper GIF timing
-        timeSlice: 1000, // Capture data every second
-        recorderType: RecordRTC.GifRecorder,
-        gif: {
-          frameRate: recordingOptions.frameRate,
-          quality: recordingOptions.gifQuality,
-        },
-        onGifRecordingStarted: () => {
-          console.log('GIF recording started');
-        },
+        frameRate: recordingOptions.frameRate, // 10fps like original
+        quality: recordingOptions.gifQuality,  // 10 (best quality) like original
+        width: recordingOptions.width,         // 1280 (upgraded from 360)
+        height: recordingOptions.height,       // 720 (upgraded from 240)
+        hidden: 440, // Same as original Sergif
         onGifPreview: (gifURL: string) => {
           setState(prev => ({ ...prev, previewUrl: gifURL }));
         },

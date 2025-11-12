@@ -14,8 +14,8 @@ export default function WebcamGifRecorder() {
   const [qualitySettings, setQualitySettings] = useState({
     width: 1280,
     height: 720,
-    frameRate: 15, // Optimized for proper GIF timing
-    gifQuality: 3, // Balanced quality and timing
+    frameRate: 10, // Exact same as original Sergif
+    gifQuality: 10, // Exact same as original Sergif (best quality)
   });
 
   const videoRef = useRef<HTMLVideoElement>(null);

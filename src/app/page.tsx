@@ -16,7 +16,7 @@ export default function Home() {
           </p>
           <div className="flex flex-wrap justify-center gap-2 text-sm">
             <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full">1280x720 HD</span>
-            <span className="px-3 py-1 bg-pink-100 text-pink-700 rounded-full">15fps Perfect Timing</span>
+            <span className="px-3 py-1 bg-pink-100 text-pink-700 rounded-full">10fps Perfect Timing</span>
             <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full">1:1 Real-time</span>
             <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full">Instant Sharing</span>
           </div>
