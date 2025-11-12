@@ -1,0 +1,10 @@
+.env
+.claude
+.next
+/node_modules
+.DS_Store
+.vscode
+npm-debug.log
+yarn-error.log
+.env.local
+gifs.db
