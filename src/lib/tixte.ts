@@ -13,23 +13,19 @@ export interface UploadResult {
 
 export const uploadGif = async (
 	buffer: Buffer,
-	filename?: string,
+	filename: string,
 ): Promise<UploadResult> => {
 	try {
-		const cleanFilename = filename
-			? filename.replace(/\.gif$/, "")
-			: `gif-${Date.now()}`;
-
 		const { data } = await tixteClient.uploadFile(buffer, {
 			extension: "gif",
-			filename: cleanFilename,
+			filename: filename,
 			domain: "",
 		});
 
 		return {
 			url: data.url,
-			size: data.size || buffer.length,
-			filename: data.filename || `${cleanFilename}.gif`,
+			size: buffer.length,
+			filename: data.filename,
 		};
 	} catch (error) {
 		console.error("Failed to upload GIF to Tixte:", error);
