@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
+import { getPublicGifs, insertGif } from "@/lib/database";
 import { uploadGif } from "@/lib/tixte";
-import { insertGif, getPublicGifs } from "@/lib/database";
 
 export async function POST(request: NextRequest) {
 	try {

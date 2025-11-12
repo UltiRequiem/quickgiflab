@@ -1,5 +1,5 @@
-import Database from "better-sqlite3";
 import { join } from "node:path";
+import Database from "better-sqlite3";
 
 const db = new Database(join(process.cwd(), "gifs.db"));
 

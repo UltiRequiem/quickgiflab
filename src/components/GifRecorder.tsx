@@ -1,6 +1,16 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import {
+	Camera,
+	Download,
+	RotateCcw,
+	Settings,
+	Square,
+	Upload,
+	Video,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -9,18 +19,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { useWebcamGifRecorder } from "@/hooks/useWebcamGifRecorder";
-import {
-	Camera,
-	Square,
-	Download,
-	Upload,
-	RotateCcw,
-	Video,
-	Settings,
-} from "lucide-react";
 import { getTixteDisplayUrl } from "@/lib/tixteUtils";
 
 export default function WebcamGifRecorder() {
@@ -30,7 +30,7 @@ export default function WebcamGifRecorder() {
 		filename: string;
 	} | null>(null);
 	const [isPublic, setIsPublic] = useState(false);
-	const [qualitySettings, setQualitySettings] = useState({
+	const [qualitySettings, _setQualitySettings] = useState({
 		width: 1280,
 		height: 720,
 		frameRate: 10, // Exact same as original Sergif
@@ -148,7 +148,7 @@ export default function WebcamGifRecorder() {
 				title: "Camera access granted!",
 				description: "You can now start recording.",
 			});
-		} catch (error) {
+		} catch (_error) {
 			toast({
 				title: "Camera Access Denied",
 				description: "Please allow camera access to record GIFs.",

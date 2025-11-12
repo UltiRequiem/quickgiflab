@@ -1,4 +1,4 @@
-// @ts-ignore - gif.js doesn't have proper TypeScript definitions
+// @ts-expect-error - gif.js doesn't have proper TypeScript definitions
 import GIF from "gif.js";
 
 export interface ConversionOptions {
