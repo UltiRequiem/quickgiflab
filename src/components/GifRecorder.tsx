@@ -9,6 +9,7 @@ import {
 	Upload,
 	Video,
 } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -197,7 +198,7 @@ export default function WebcamGifRecorder() {
 						</div>
 					) : previewUrl ? (
 						<div className="w-full h-full flex items-center justify-center bg-black">
-							<img
+							<Image
 								src={previewUrl}
 								alt="Recorded GIF"
 								className="max-w-full max-h-full object-contain"
@@ -280,7 +281,7 @@ export default function WebcamGifRecorder() {
 								<label className="text-sm font-medium text-gray-700">
 									Private
 								</label>
-								<button
+								<Button
 									onClick={() => setIsPublic(!isPublic)}
 									className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
 										isPublic ? "bg-indigo-600" : "bg-gray-200"
@@ -291,7 +292,7 @@ export default function WebcamGifRecorder() {
 											isPublic ? "translate-x-6" : "translate-x-1"
 										}`}
 									/>
-								</button>
+								</Button>
 								<label className="text-sm font-medium text-gray-700">
 									Public
 								</label>
@@ -356,7 +357,7 @@ export default function WebcamGifRecorder() {
 
 						{/* Display the actual GIF */}
 						<div className="mb-4 flex justify-center">
-							<img
+							<Image
 								src={getTixteDisplayUrl(uploadedGif.url)}
 								alt="Uploaded GIF"
 								className="max-w-sm max-h-64 rounded-lg border border-green-300"
