@@ -410,7 +410,7 @@ export default function WebcamGifRecorder() {
 								</a>
 								<Button
 									onClick={() => {
-										const tweetText = `Check out this GIF I made with Sergif 2026! 🎥✨`;
+										const tweetText = `Check out this GIF I made with Quick GIF LAB! 🎥✨`;
 										const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(uploadedGif.url)}`;
 										window.open(tweetUrl, "_blank");
 									}}

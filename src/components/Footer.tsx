@@ -2,7 +2,7 @@ export function Footer() {
 	return (
 		<footer className="text-center text-gray-500 text-sm">
 			<p className="mb-2">
-				🚀 Sergif 2026 - Built with Next.js 16, Bun, SQLite, T3 Env, and Tixte
+				🚀 Quick GIF Lab - Built with Next.js 16, Bun, SQLite, T3 Env, and Tixte
 			</p>
 			<p>
 				<a
