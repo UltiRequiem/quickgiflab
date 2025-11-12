@@ -46,7 +46,7 @@ export const useWebcamGifRecorder = (
 		stream: null,
 	});
 
-	const recorderRef = useRef<any>(null);
+	const recorderRef = useRef<RecordRTC>(null);
 	const startTimeRef = useRef<number>(0);
 	const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -154,6 +154,7 @@ export const useWebcamGifRecorder = (
 		if (!recorderRef.current || !state.isRecording) return;
 
 		recorderRef.current.stopRecording(() => {
+			if (!recorderRef.current) return;
 			const blob = recorderRef.current.getBlob();
 			const url = URL.createObjectURL(blob);
 
@@ -174,6 +175,7 @@ export const useWebcamGifRecorder = (
 		if (recorderRef.current) {
 			if (state.isRecording) {
 				recorderRef.current.stopRecording(() => {
+					if (!recorderRef.current) return;
 					recorderRef.current.destroy();
 				});
 			} else {
