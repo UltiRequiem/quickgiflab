@@ -385,7 +385,7 @@ export default function WebcamGifRecorder() {
 										readOnly
 										className="flex-1 px-3 py-2 text-sm bg-gray-50 border border-gray-300 rounded"
 									/>
-									<button
+									<Button
 										onClick={async () => {
 											await navigator.clipboard.writeText(uploadedGif.url);
 											toast.success("Link copied to clipboard");
@@ -393,7 +393,7 @@ export default function WebcamGifRecorder() {
 										className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors text-sm"
 									>
 										Copy
-									</button>
+									</Button>
 								</div>
 							</div>
 
@@ -407,7 +407,7 @@ export default function WebcamGifRecorder() {
 								>
 									Open in New Tab
 								</a>
-								<button
+								<Button
 									onClick={() => {
 										const tweetText = `Check out this GIF I made with Sergif 2026! 🎥✨`;
 										const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(uploadedGif.url)}`;
@@ -416,7 +416,7 @@ export default function WebcamGifRecorder() {
 									className="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors"
 								>
 									Share on Twitter
-								</button>
+								</Button>
 							</div>
 						</div>
 					</div>
