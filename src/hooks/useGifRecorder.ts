@@ -23,6 +23,21 @@ export const useGifRecorder = () => {
 	const startTimeRef = useRef<number>(0);
 	const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+	const stopRecording = useCallback(() => {
+		if (mediaRecorderRef.current && state.isRecording) {
+			mediaRecorderRef.current.stop();
+
+			if (streamRef.current) {
+				streamRef.current.getTracks().forEach((track) => void track.stop());
+				streamRef.current = null;
+			}
+
+			if (intervalRef.current) {
+				clearInterval(intervalRef.current);
+			}
+		}
+	}, [state.isRecording]);
+
 	const startRecording = useCallback(async () => {
 		try {
 			setState((prev) => ({ ...prev, error: null }));
@@ -105,21 +120,6 @@ export const useGifRecorder = () => {
 			}));
 		}
 	}, [stopRecording]);
-
-	const stopRecording = useCallback(() => {
-		if (mediaRecorderRef.current && state.isRecording) {
-			mediaRecorderRef.current.stop();
-
-			if (streamRef.current) {
-				streamRef.current.getTracks().forEach((track) => track.stop());
-				streamRef.current = null;
-			}
-
-			if (intervalRef.current) {
-				clearInterval(intervalRef.current);
-			}
-		}
-	}, [state.isRecording]);
 
 	const pauseRecording = useCallback(() => {
 		if (mediaRecorderRef.current && state.isRecording && !state.isPaused) {

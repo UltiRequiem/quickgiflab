@@ -98,9 +98,12 @@ export const useWebcamGifRecorder = (
 			if (!stream) return;
 
 			// Create RecordRTC instance using original Sergif settings (but higher resolution)
+			// @ts-ignore - RecordRTC doesn't have perfect TypeScript definitions
+
 			const recorder = new RecordRTC(stream, {
 				type: "gif",
 				frameRate: recordingOptions.frameRate, // 10fps like original
+				// @ts-ignore - RecordRTC doesn't have perfect TypeScript definitions
 				quality: recordingOptions.gifQuality, // 10 (best quality) like original
 				width: recordingOptions.width, // 1280 (upgraded from 360)
 				height: recordingOptions.height, // 720 (upgraded from 240)
@@ -141,7 +144,10 @@ export const useWebcamGifRecorder = (
 		state.stream,
 		state.isPermissionGranted,
 		requestCameraPermission,
-		recordingOptions,
+		recordingOptions.frameRate,
+		recordingOptions.gifQuality,
+		recordingOptions.width,
+		recordingOptions.height,
 	]);
 
 	const stopRecording = useCallback(() => {
@@ -194,7 +200,7 @@ export const useWebcamGifRecorder = (
 
 	const stopCamera = useCallback(() => {
 		if (state.stream) {
-			state.stream.getTracks().forEach((track) => track.stop());
+			state.stream.getTracks().forEach((track) => void track.stop());
 			setState((prev) => ({
 				...prev,
 				stream: null,
