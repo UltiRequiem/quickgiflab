@@ -2,8 +2,6 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-// @ts-ignore - RecordRTC doesn't have perfect TypeScript definitions
-import RecordRTC from "recordrtc";
 
 export interface RecorderState {
 	isRecording: boolean;
@@ -46,7 +44,7 @@ export const useWebcamGifRecorder = (
 		stream: null,
 	});
 
-	const recorderRef = useRef<RecordRTC>(null);
+	const recorderRef = useRef<any>(null);
 	const startTimeRef = useRef<number>(0);
 	const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -99,6 +97,7 @@ export const useWebcamGifRecorder = (
 
 			// Create RecordRTC instance using original Sergif settings (but higher resolution)
 			// @ts-ignore - RecordRTC doesn't have perfect TypeScript definitions
+			const RecordRTC = (await import("recordrtc")).default;
 
 			const recorder = new RecordRTC(stream, {
 				type: "gif",

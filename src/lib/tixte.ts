@@ -2,7 +2,7 @@ import { TixteClient } from "@ultirequiem/tixte";
 import { env } from "@/env";
 
 const tixteClient = new TixteClient(env.TIXTE_API_KEY, {
-	defaultURL: env.DEFAULT_TIXTE_URL,
+	defaultURL: env.DEFAULT_TIXTE_DOMAIN,
 });
 
 export const uploadGif = async (buffer: Buffer, filename: string) => {

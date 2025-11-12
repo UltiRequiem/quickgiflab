@@ -20,7 +20,8 @@ db.exec(`
     tixte_url TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     size INTEGER NOT NULL,
-    duration INTEGER
+    duration INTEGER,
+    is_public INTEGER DEFAULT 0
   )
 `);
 

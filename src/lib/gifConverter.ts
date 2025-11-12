@@ -1,6 +1,3 @@
-// @ts-expect-error - gif.js doesn't have proper TypeScript definitions
-import GIF from "gif.js";
-
 export interface ConversionOptions {
 	width?: number;
 	height?: number;
@@ -12,6 +9,9 @@ export const convertVideoToGif = async (
 	videoBlob: Blob,
 	options: ConversionOptions = {},
 ): Promise<Blob> => {
+	// @ts-expect-error - gif.js doesn't have proper TypeScript definitions
+	const GIF = (await import("gif.js")).default;
+
 	return new Promise((resolve, reject) => {
 		const video = document.createElement("video");
 		const canvas = document.createElement("canvas");

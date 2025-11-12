@@ -6,6 +6,9 @@ const nextConfig = {
 			allowedOrigins: ["localhost:3000"],
 		},
 	},
+	images: {
+		remotePatterns: [new URL("https://ultigifs.tixte.co/r/**")],
+	},
 };
 
 module.exports = nextConfig;

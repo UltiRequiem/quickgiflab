@@ -1,7 +1,8 @@
 "use client";
 
 import { ExternalLink, RefreshCw } from "lucide-react";
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,7 +29,7 @@ export default function GifGallery() {
 	const [gifs, setGifs] = useState<GifRecord[]>([]);
 	const [loading, setLoading] = useState(true);
 
-	const fetchGifs = async () => {
+	const fetchGifs = useCallback(async () => {
 		try {
 			setLoading(true);
 			const response = await fetch("/api/gifs");
@@ -45,7 +46,7 @@ export default function GifGallery() {
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, []);
 
 	const formatFileSize = (bytes: number) => {
 		if (bytes === 0) return "0 Bytes";
@@ -109,11 +110,13 @@ export default function GifGallery() {
 						{gifs.map((gif) => (
 							<Card key={gif.id} className="overflow-hidden">
 								<div className="aspect-video bg-gray-100 flex items-center justify-center">
-									<img
+									<Image
 										src={getTixteDisplayUrl(gif.tixte_url)}
 										alt={gif.filename}
 										className="max-w-full max-h-full object-contain"
 										loading="lazy"
+										width={gif.size}
+										height={gif.size}
 										onError={() =>
 											console.error(
 												"Failed to load GIF in gallery:",
