@@ -1,79 +1,90 @@
 // @ts-ignore - gif.js doesn't have proper TypeScript definitions
-import GIF from 'gif.js';
+import GIF from "gif.js";
 
 export interface ConversionOptions {
-  width?: number;
-  height?: number;
-  quality?: number;
-  frameRate?: number;
+	width?: number;
+	height?: number;
+	quality?: number;
+	frameRate?: number;
 }
 
 export const convertVideoToGif = async (
-  videoBlob: Blob,
-  options: ConversionOptions = {}
+	videoBlob: Blob,
+	options: ConversionOptions = {},
 ): Promise<Blob> => {
-  return new Promise((resolve, reject) => {
-    const video = document.createElement('video');
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d')!;
+	return new Promise((resolve, reject) => {
+		const video = document.createElement("video");
+		const canvas = document.createElement("canvas");
 
-    video.src = URL.createObjectURL(videoBlob);
-    video.muted = true;
+		const ctx = canvas.getContext("2d");
 
-    video.onloadedmetadata = () => {
-      const { width = 480, height = 320, quality = 10, frameRate = 10 } = options;
+		if (!ctx) {
+			reject(new Error("Failed to get canvas context"));
+			return;
+		}
 
-      canvas.width = width;
-      canvas.height = height;
+		video.src = URL.createObjectURL(videoBlob);
+		video.muted = true;
 
-      const gif = new GIF({
-        workers: 2,
-        quality: quality,
-        width: width,
-        height: height,
-        workerScript: '/gif.worker.js', // We'll need to add this to public folder
-      });
+		video.onloadedmetadata = () => {
+			const {
+				width = 480,
+				height = 320,
+				quality = 10,
+				frameRate = 10,
+			} = options;
 
-      const duration = video.duration;
-      const frameInterval = 1 / frameRate;
-      let currentTime = 0;
+			canvas.width = width;
+			canvas.height = height;
 
-      const captureFrame = () => {
-        if (currentTime >= duration) {
-          gif.render();
-          return;
-        }
+			const gif = new GIF({
+				workers: 2,
+				quality: quality,
+				width: width,
+				height: height,
+				workerScript: "/gif.worker.js", // We'll need to add this to public folder
+			});
 
-        video.currentTime = currentTime;
-        video.onseeked = () => {
-          // Scale video to canvas size
-          ctx.drawImage(video, 0, 0, width, height);
+			const duration = video.duration;
+			const frameInterval = 1 / frameRate;
+			let currentTime = 0;
 
-          // Add frame to GIF
-          gif.addFrame(canvas, { delay: frameInterval * 1000 });
+			const captureFrame = () => {
+				if (currentTime >= duration) {
+					gif.render();
+					return;
+				}
 
-          currentTime += frameInterval;
-          setTimeout(captureFrame, 10);
-        };
-      };
+				video.currentTime = currentTime;
+				video.onseeked = () => {
+					// Scale video to canvas size
+					ctx.drawImage(video, 0, 0, width, height);
 
-      gif.on('finished', (blob: Blob) => {
-        URL.revokeObjectURL(video.src);
-        resolve(blob);
-      });
+					// Add frame to GIF
+					gif.addFrame(canvas, { delay: frameInterval * 1000 });
 
-      gif.on('error', (error: Error) => {
-        URL.revokeObjectURL(video.src);
-        reject(error);
-      });
+					currentTime += frameInterval;
+					setTimeout(captureFrame, 10);
+				};
+			};
 
-      video.onseeked = null; // Clear the handler
-      captureFrame();
-    };
+			gif.on("finished", (blob: Blob) => {
+				URL.revokeObjectURL(video.src);
+				resolve(blob);
+			});
 
-    video.onerror = () => {
-      URL.revokeObjectURL(video.src);
-      reject(new Error('Failed to load video'));
-    };
-  });
+			gif.on("error", (error: Error) => {
+				URL.revokeObjectURL(video.src);
+				reject(error);
+			});
+
+			video.onseeked = null; // Clear the handler
+			captureFrame();
+		};
+
+		video.onerror = () => {
+			URL.revokeObjectURL(video.src);
+			reject(new Error("Failed to load video"));
+		};
+	});
 };

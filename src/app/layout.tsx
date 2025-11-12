@@ -1,26 +1,27 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { Toaster } from '@/components/ui/toaster'
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 
-const inter = Inter({ subsets: ['latin'] })
+import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'GIF Screen Recorder',
-  description: 'Record your screen and save as GIF with Tixte integration',
-}
+	title: "GIF Screen Recorder",
+	description: "Record your screen and save as GIF with Tixte integration",
+};
 
 export default function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode
+	children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <body className={inter.className}>
-        {children}
-        <Toaster />
-      </body>
-    </html>
-  )
+	return (
+		<html lang="en">
+			<body className={inter.className}>
+				{children}
+				<Toaster />
+			</body>
+		</html>
+	);
 }
