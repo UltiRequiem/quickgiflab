@@ -29,10 +29,8 @@ export default function Home() {
 					</div>
 				</div>
 
-				{/* Main Recorder Component */}
 				<WebcamGifRecorder />
 
-				{/* Public Gallery */}
 				<GifGallery />
 
 				{/* Privacy Notice */}

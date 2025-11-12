@@ -3,10 +3,11 @@ import { getGifById } from "@/lib/database";
 
 export async function GET(
 	_request: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
-		const gif = getGifById.get(params.id);
+		const { id } = await params;
+		const gif = getGifById.get(id);
 
 		if (!gif) {
 			return NextResponse.json({ error: "GIF not found" }, { status: 404 });

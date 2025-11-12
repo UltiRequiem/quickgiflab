@@ -1,6 +1,9 @@
+/** biome-ignore-all lint/suspicious/noTsIgnore: RecordRTC has bad type definitions */
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+// @ts-ignore - RecordRTC doesn't have perfect TypeScript definitions
+import RecordRTC from "recordrtc";
 
 export interface RecorderState {
 	isRecording: boolean;
@@ -93,9 +96,6 @@ export const useWebcamGifRecorder = (
 			}
 
 			if (!stream) return;
-
-			// Dynamically import RecordRTC only on client-side
-			const RecordRTC = (await import("recordrtc")).default;
 
 			// Create RecordRTC instance using original Sergif settings (but higher resolution)
 			const recorder = new RecordRTC(stream, {

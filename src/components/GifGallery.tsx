@@ -2,6 +2,7 @@
 
 import { ExternalLink, RefreshCw } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +12,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { toast } from "@/hooks/use-toast";
 import { getTixteDisplayUrl } from "@/lib/tixteUtils";
 
 interface GifRecord {
@@ -40,11 +40,7 @@ export default function GifGallery() {
 				throw new Error(data.error || "Failed to fetch GIFs");
 			}
 		} catch (error) {
-			toast({
-				title: "Error",
-				description: "Failed to load GIFs from database.",
-				variant: "destructive",
-			});
+			toast.error("Failed to load GIFs from database.");
 			console.error("Fetch error:", error);
 		} finally {
 			setLoading(false);

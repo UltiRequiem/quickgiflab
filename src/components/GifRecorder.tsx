@@ -10,6 +10,7 @@ import {
 	Video,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +20,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { toast } from "@/hooks/use-toast";
 import { useWebcamGifRecorder } from "@/hooks/useWebcamGifRecorder";
 import { getTixteDisplayUrl } from "@/lib/tixteUtils";
 
@@ -81,13 +81,9 @@ export default function WebcamGifRecorder() {
 			document.body.removeChild(a);
 			URL.revokeObjectURL(url);
 
-			toast({ title: "Success!", description: "GIF downloaded successfully." });
+			toast.success("GIF downloaded successfully.");
 		} catch (error) {
-			toast({
-				title: "Error",
-				description: "Failed to download GIF.",
-				variant: "destructive",
-			});
+			toast.error("Failed to download GIF.");
 			console.error("Download error:", error);
 		}
 	};
@@ -98,10 +94,7 @@ export default function WebcamGifRecorder() {
 		try {
 			setIsUploading(true);
 
-			toast({
-				title: "Uploading GIF...",
-				description: "Please wait while we upload your GIF.",
-			});
+			toast.loading("Uploading GIF...");
 
 			const formData = new FormData();
 			formData.append("gif", recordedBlob, `webcam-gif-${Date.now()}`);
@@ -119,17 +112,11 @@ export default function WebcamGifRecorder() {
 			}
 
 			setUploadedGif({ url: data.url, filename: data.filename });
-			toast({
-				title: "Success!",
-				description: "GIF uploaded successfully to Tixte!",
-			});
+			toast.success("GIF uploaded successfully to Tixte!");
 		} catch (error) {
-			toast({
-				title: "Upload Error",
-				description:
-					error instanceof Error ? error.message : "Failed to upload GIF.",
-				variant: "destructive",
-			});
+			toast.error(
+				error instanceof Error ? error.message : "Failed to upload GIF.",
+			);
 			console.error("Upload error:", error);
 		} finally {
 			setIsUploading(false);
@@ -144,16 +131,9 @@ export default function WebcamGifRecorder() {
 	const handleRequestCamera = async () => {
 		try {
 			await requestCameraPermission();
-			toast({
-				title: "Camera access granted!",
-				description: "You can now start recording.",
-			});
+			toast.success("Camera access granted! You can now start recording.");
 		} catch (_error) {
-			toast({
-				title: "Camera Access Denied",
-				description: "Please allow camera access to record GIFs.",
-				variant: "destructive",
-			});
+			toast.error("Please allow camera access to record GIFs.");
 		}
 	};
 
@@ -408,10 +388,7 @@ export default function WebcamGifRecorder() {
 									<button
 										onClick={async () => {
 											await navigator.clipboard.writeText(uploadedGif.url);
-											toast({
-												title: "Copied!",
-												description: "Link copied to clipboard",
-											});
+											toast.success("Link copied to clipboard");
 										}}
 										className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors text-sm"
 									>

@@ -30,7 +30,6 @@ export const useGifRecorder = () => {
 			// Request screen capture
 			const stream = await navigator.mediaDevices.getDisplayMedia({
 				video: {
-					mediaSource: "screen" as MediaSource,
 					frameRate: 30,
 				},
 				audio: false, // GIFs don't have audio

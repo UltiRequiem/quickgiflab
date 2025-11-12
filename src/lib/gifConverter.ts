@@ -42,7 +42,7 @@ export const convertVideoToGif = async (
 				quality: quality,
 				width: width,
 				height: height,
-				workerScript: "/gif.worker.js", // We'll need to add this to public folder
+				workerScript: "/gif.worker.js",
 			});
 
 			const duration = video.duration;
@@ -78,7 +78,7 @@ export const convertVideoToGif = async (
 				reject(error);
 			});
 
-			video.onseeked = null; // Clear the handler
+			video.onseeked = null;
 			captureFrame();
 		};
 

@@ -5,21 +5,11 @@ const tixteClient = new TixteClient(env.TIXTE_API_KEY, {
 	defaultURL: env.DEFAULT_TIXTE_URL,
 });
 
-export interface UploadResult {
-	url: string;
-	size: number;
-	filename: string;
-}
-
-export const uploadGif = async (
-	buffer: Buffer,
-	filename: string,
-): Promise<UploadResult> => {
+export const uploadGif = async (buffer: Buffer, filename: string) => {
 	try {
 		const { data } = await tixteClient.uploadFile(buffer, {
 			extension: "gif",
 			filename: filename,
-			domain: "",
 		});
 
 		return {
