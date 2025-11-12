@@ -1,15 +1,16 @@
-import Database from 'better-sqlite3';
-import { join } from 'path';
+import Database from "better-sqlite3";
+import { join } from "path";
 
-const db = new Database(join(process.cwd(), 'gifs.db'));
+const db = new Database(join(process.cwd(), "gifs.db"));
 
 export interface GifRecord {
-  id: number;
-  filename: string;
-  tixte_url: string;
-  created_at: string;
-  size: number;
-  duration?: number;
+	id: number;
+	filename: string;
+	tixte_url: string;
+	created_at: string;
+	size: number;
+	duration?: number;
+	is_public: boolean;
 }
 
 db.exec(`
@@ -24,12 +25,16 @@ db.exec(`
 `);
 
 export const insertGif = db.prepare(`
-  INSERT INTO gifs (filename, tixte_url, size, duration)
-  VALUES (?, ?, ?, ?)
+  INSERT INTO gifs (filename, tixte_url, size, duration, is_public)
+  VALUES (?, ?, ?, ?, ?)
 `);
 
 export const getAllGifs = db.prepare(`
   SELECT * FROM gifs ORDER BY created_at DESC
+`);
+
+export const getPublicGifs = db.prepare(`
+  SELECT * FROM gifs WHERE is_public = 1 ORDER BY created_at DESC
 `);
 
 export const getGifById = db.prepare(`

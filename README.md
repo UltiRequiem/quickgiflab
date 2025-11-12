@@ -49,7 +49,13 @@ A complete rebuild of the original [Sergif](https://github.com/UltiRequiem/sergi
    bun run dev
    ```
 
-5. **Open your browser**
+5. **Database Migration** (Automatic)
+   The application automatically handles database migrations. You'll see console output like:
+   ```
+   ✅ Added is_public column to gifs table
+   ```
+
+6. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## How to Use 📖
@@ -199,6 +205,11 @@ Supported browsers:
    - Verify camera permissions are granted
    - Check that no other application is using the camera
    - Try closing other tabs that might be using the camera
+
+5. **"Database error: no column named is_public"**
+   - Restart the development server to trigger automatic migration
+   - The app will automatically add the missing column
+   - See `DATABASE_MIGRATIONS.md` for detailed troubleshooting
 
 ### Browser Permissions
 

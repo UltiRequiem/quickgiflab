@@ -18,15 +18,26 @@ export default function Home() {
             <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full">1280x720 HD</span>
             <span className="px-3 py-1 bg-pink-100 text-pink-700 rounded-full">10fps Perfect Timing</span>
             <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full">1:1 Real-time</span>
-            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full">Instant Sharing</span>
+            <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full">Public & Private</span>
           </div>
         </div>
 
         {/* Main Recorder Component */}
         <WebcamGifRecorder />
 
-        {/* Gallery Component */}
+        {/* Public Gallery */}
         <GifGallery />
+
+        {/* Privacy Notice */}
+        <div className="max-w-2xl mx-auto p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <h3 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
+            🔒 Privacy Control
+          </h3>
+          <p className="text-blue-700 text-sm">
+            Choose whether your GIFs are private (link-only) or public (appear in gallery).
+            Private GIFs are secure by default - only people with the direct link can view them.
+          </p>
+        </div>
 
         {/* Footer */}
         <footer className="text-center text-gray-500 text-sm">

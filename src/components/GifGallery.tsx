@@ -5,7 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
-import { ExternalLink, Trash2, RefreshCw } from 'lucide-react';
+import { ExternalLink, RefreshCw } from 'lucide-react';
+import { getTixteDisplayUrl } from '@/lib/tixteUtils';
 
 interface GifRecord {
   id: number;
@@ -14,6 +15,7 @@ interface GifRecord {
   created_at: string;
   size: number;
   duration?: number;
+  is_public: boolean;
 }
 
 export default function GifGallery() {
@@ -43,32 +45,6 @@ export default function GifGallery() {
     }
   };
 
-  const deleteGif = async (id: number) => {
-    try {
-      const response = await fetch(`/api/gifs/${id}`, {
-        method: 'DELETE',
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setGifs(prev => prev.filter(gif => gif.id !== id));
-        toast({
-          title: "Success",
-          description: "GIF deleted successfully."
-        });
-      } else {
-        throw new Error(data.error || 'Failed to delete GIF');
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to delete GIF.",
-        variant: "destructive"
-      });
-      console.error('Delete error:', error);
-    }
-  };
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
@@ -98,10 +74,10 @@ export default function GifGallery() {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="flex items-center gap-2">
-              📸 Your GIF Gallery
+              🌟 Public GIF Gallery
             </CardTitle>
             <CardDescription>
-              View and manage your uploaded GIFs
+              Check out GIFs shared by the community
             </CardDescription>
           </div>
           <Button
@@ -124,8 +100,8 @@ export default function GifGallery() {
           </div>
         ) : gifs.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
-            <p>No GIFs uploaded yet.</p>
-            <p className="text-sm mt-2">Start by recording your first screen capture above!</p>
+            <p>No public GIFs yet.</p>
+            <p className="text-sm mt-2">Be the first to share a public GIF!</p>
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -133,10 +109,11 @@ export default function GifGallery() {
               <Card key={gif.id} className="overflow-hidden">
                 <div className="aspect-video bg-gray-100 flex items-center justify-center">
                   <img
-                    src={gif.tixte_url}
+                    src={getTixteDisplayUrl(gif.tixte_url)}
                     alt={gif.filename}
                     className="max-w-full max-h-full object-contain"
                     loading="lazy"
+                    onError={() => console.error('Failed to load GIF in gallery:', gif.tixte_url)}
                   />
                 </div>
 
@@ -163,15 +140,7 @@ export default function GifGallery() {
                         onClick={() => window.open(gif.tixte_url, '_blank')}
                       >
                         <ExternalLink size={12} />
-                        View
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() => deleteGif(gif.id)}
-                        className="flex items-center gap-1"
-                      >
-                        <Trash2 size={12} />
+                        View GIF
                       </Button>
                     </div>
                   </div>

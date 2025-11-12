@@ -7,10 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
 import { useWebcamGifRecorder } from '@/hooks/useWebcamGifRecorder';
 import { Camera, Square, Download, Upload, RotateCcw, Video, Settings } from 'lucide-react';
+import { getTixteDisplayUrl } from '@/lib/tixteUtils';
 
 export default function WebcamGifRecorder() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedGif, setUploadedGif] = useState<{ url: string; filename: string } | null>(null);
+  const [isPublic, setIsPublic] = useState(false);
   const [qualitySettings, setQualitySettings] = useState({
     width: 1280,
     height: 720,
@@ -83,7 +85,8 @@ export default function WebcamGifRecorder() {
       toast({ title: "Uploading GIF...", description: "Please wait while we upload your GIF." });
 
       const formData = new FormData();
-      formData.append('gif', recordedBlob, `webcam-gif-${Date.now()}.gif`);
+      formData.append('gif', recordedBlob, `webcam-gif-${Date.now()}`);
+      formData.append('isPublic', String(isPublic));
 
       const response = await fetch('/api/gifs', {
         method: 'POST',
@@ -182,11 +185,20 @@ export default function WebcamGifRecorder() {
               </p>
             </div>
           ) : previewUrl ? (
-            <img
-              src={previewUrl}
-              alt="Recorded GIF"
-              className="w-full h-full object-cover"
-            />
+            <div className="w-full h-full flex items-center justify-center bg-black">
+              <img
+                src={previewUrl}
+                alt="Recorded GIF"
+                className="max-w-full max-h-full object-contain"
+                onError={(e) => {
+                  console.error('GIF failed to load:', previewUrl);
+                  console.error('Error details:', e);
+                }}
+                onLoad={() => {
+                  console.log('GIF loaded successfully:', previewUrl);
+                }}
+              />
+            </div>
           ) : (
             <video
               ref={videoRef}
@@ -235,27 +247,60 @@ export default function WebcamGifRecorder() {
               Stop Recording
             </Button>
           ) : (
-            <>
-              <Button onClick={handleDownload} variant="outline" size="lg" className="flex items-center gap-2">
-                <Download size={20} />
-                Download GIF
-              </Button>
+            <div className="space-y-4">
+              {/* Privacy Toggle */}
+              <div className="flex items-center justify-center gap-3 p-3 bg-gray-50 rounded-lg">
+                <label className="text-sm font-medium text-gray-700">
+                  Private
+                </label>
+                <button
+                  onClick={() => setIsPublic(!isPublic)}
+                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
+                    isPublic ? 'bg-indigo-600' : 'bg-gray-200'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                      isPublic ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                  />
+                </button>
+                <label className="text-sm font-medium text-gray-700">
+                  Public
+                </label>
+              </div>
 
-              <Button
-                onClick={handleUpload}
-                disabled={isUploading}
-                size="lg"
-                className="flex items-center gap-2"
-              >
-                <Upload size={20} />
-                {isUploading ? 'Uploading...' : 'Upload & Share'}
-              </Button>
+              <div className="text-xs text-center text-gray-500">
+                {isPublic ? (
+                  <span className="text-indigo-600">✓ Will appear in public gallery</span>
+                ) : (
+                  <span>🔒 Only you have the link</span>
+                )}
+              </div>
 
-              <Button onClick={handleStartNew} variant="outline" size="lg" className="flex items-center gap-2">
-                <RotateCcw size={20} />
-                Record Another
-              </Button>
-            </>
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3 justify-center">
+                <Button onClick={handleDownload} variant="outline" size="lg" className="flex items-center gap-2">
+                  <Download size={20} />
+                  Download GIF
+                </Button>
+
+                <Button
+                  onClick={handleUpload}
+                  disabled={isUploading}
+                  size="lg"
+                  className="flex items-center gap-2"
+                >
+                  <Upload size={20} />
+                  {isUploading ? 'Uploading...' : 'Upload & Share'}
+                </Button>
+
+                <Button onClick={handleStartNew} variant="outline" size="lg" className="flex items-center gap-2">
+                  <RotateCcw size={20} />
+                  Record Another
+                </Button>
+              </div>
+            </div>
           )}
         </div>
 
@@ -263,26 +308,67 @@ export default function WebcamGifRecorder() {
         {uploadedGif && (
           <div className="p-6 bg-green-50 border border-green-200 rounded-lg">
             <h3 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
-              🎉 Upload Successful!
+              🎉 GIF Ready to Share!
             </h3>
-            <p className="text-green-700 mb-3">
-              Your GIF has been uploaded and is ready to share!
+            <p className="text-green-700 mb-4">
+              Your GIF has been uploaded and is ready to share with your friends!
             </p>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <a
-                href={uploadedGif.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-center"
-              >
-                View GIF
-              </a>
-              <button
-                onClick={() => navigator.clipboard.writeText(uploadedGif.url)}
-                className="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors"
-              >
-                Copy Link
-              </button>
+
+            {/* Display the actual GIF */}
+            <div className="mb-4 flex justify-center">
+              <img
+                src={getTixteDisplayUrl(uploadedGif.url)}
+                alt="Uploaded GIF"
+                className="max-w-sm max-h-64 rounded-lg border border-green-300"
+                onError={() => console.error('Failed to load uploaded GIF:', uploadedGif.url)}
+                onLoad={() => console.log('GIF loaded successfully:', getTixteDisplayUrl(uploadedGif.url))}
+              />
+            </div>
+
+            <div className="flex flex-col gap-3">
+              {/* Shareable Link */}
+              <div className="p-3 bg-white rounded border border-green-300">
+                <p className="text-sm text-green-700 mb-2 font-medium">Share this link:</p>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={uploadedGif.url}
+                    readOnly
+                    className="flex-1 px-3 py-2 text-sm bg-gray-50 border border-gray-300 rounded"
+                  />
+                  <button
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(uploadedGif.url);
+                      toast({ title: "Copied!", description: "Link copied to clipboard" });
+                    }}
+                    className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors text-sm"
+                  >
+                    Copy
+                  </button>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-2">
+                <a
+                  href={uploadedGif.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                >
+                  Open in New Tab
+                </a>
+                <button
+                  onClick={() => {
+                    const tweetText = `Check out this GIF I made with Sergif 2026! 🎥✨`;
+                    const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(uploadedGif.url)}`;
+                    window.open(tweetUrl, '_blank');
+                  }}
+                  className="px-4 py-2 border border-green-600 text-green-600 rounded-md hover:bg-green-50 transition-colors"
+                >
+                  Share on Twitter
+                </button>
+              </div>
             </div>
           </div>
         )}
