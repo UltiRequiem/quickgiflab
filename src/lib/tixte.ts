@@ -1,9 +1,7 @@
 import { TixteClient } from "@ultirequiem/tixte";
 import { env } from "@/env";
 
-const tixteClient = new TixteClient(env.TIXTE_API_KEY, {
-  defaultDomain: "sergif.likes.cash",
-});
+const tixteClient = new TixteClient(env.TIXTE_API_KEY);
 
 export interface UploadResult {
   url: string;
@@ -16,6 +14,7 @@ export const uploadGif = async (buffer: Buffer, filename?: string): Promise<Uplo
     const { data } = await tixteClient.uploadFile(buffer, {
       extension: "gif",
       filename: filename || `gif-${Date.now()}`,
+      domain: "ultigifs.tixte.co", // Use the actual domain associated with your API key
     });
 
     return {
@@ -25,6 +24,7 @@ export const uploadGif = async (buffer: Buffer, filename?: string): Promise<Uplo
     };
   } catch (error) {
     console.error("Failed to upload GIF to Tixte:", error);
+    console.error("Full error details:", error);
     throw new Error("Failed to upload GIF");
   }
 };
