@@ -1,5 +1,5 @@
 import Database from "better-sqlite3";
-import { join } from "path";
+import { join } from "node:path";
 
 const db = new Database(join(process.cwd(), "gifs.db"));
 
@@ -39,10 +39,6 @@ export const getPublicGifs = db.prepare(`
 
 export const getGifById = db.prepare(`
   SELECT * FROM gifs WHERE id = ?
-`);
-
-export const deleteGif = db.prepare(`
-  DELETE FROM gifs WHERE id = ?
 `);
 
 export default db;

@@ -25,32 +25,38 @@ A complete rebuild of the original [Sergif](https://github.com/UltiRequiem/sergi
 ### Installation
 
 1. **Clone or navigate to the project directory**
+
    ```bash
    cd sergif-2026
    ```
 
 2. **Install dependencies**
+
    ```bash
    bun install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env.local
    ```
 
    Edit `.env.local` and add your Tixte API key:
+
    ```bash
    TIXTE_API_KEY=your_actual_tixte_api_key_here
    ```
 
 4. **Start the development server**
+
    ```bash
    bun run dev
    ```
 
 5. **Database Migration** (Automatic)
    The application automatically handles database migrations. You'll see console output like:
+
    ```
    ✅ Added is_public column to gifs table
    ```
@@ -80,7 +86,6 @@ A complete rebuild of the original [Sergif](https://github.com/UltiRequiem/sergi
 - View all uploaded GIFs in the gallery
 - Click "View GIF" to open in a new tab
 - Copy direct links for easy sharing
-- Delete GIFs you no longer need
 - All GIFs are stored with metadata in SQLite
 
 ## Project Structure 📁
@@ -114,7 +119,6 @@ sergif-2026/
 - `GET /api/gifs` - Fetch all GIFs
 - `POST /api/gifs` - Upload a new GIF
 - `GET /api/gifs/[id]` - Get specific GIF
-- `DELETE /api/gifs/[id]` - Delete a GIF
 
 ## Technologies Used 🛠️
 
@@ -140,6 +144,7 @@ This project uses **T3 Env** for type-safe environment variable validation. The 
 - ✅ **IntelliSense**: Full TypeScript support for environment variables
 
 Required environment variables:
+
 - `TIXTE_API_KEY` - Your Tixte API key (server-side)
 - `NEXT_PUBLIC_APP_URL` - Your application URL (client-side)
 - `NODE_ENV` - Environment mode (automatically set)
@@ -171,12 +176,14 @@ const tixteClient = new TixteClient(process.env.TIXTE_API_KEY!, {
 ## Browser Support 🌐
 
 This application requires modern browser features:
+
 - **getUserMedia API** (for webcam access)
 - **MediaRecorder API** (for video recording)
 - **File API** (for file handling)
 - **WebRTC** (for real-time communication)
 
 Supported browsers:
+
 - Chrome/Chromium 72+ (recommended)
 - Firefox 66+
 - Safari 13+
@@ -187,21 +194,25 @@ Supported browsers:
 ### Common Issues
 
 1. **"Camera access denied"**
+
    - Ensure you're using HTTPS or localhost
    - Check browser permissions for camera access
    - Try refreshing the page and allowing camera access
 
 2. **"Upload failed"**
+
    - Check your Tixte API key in `.env.local`
    - Verify your Tixte account has sufficient storage
    - Ensure file size is under Tixte limits
 
 3. **"Poor GIF quality"**
+
    - Ensure good lighting when recording
    - Keep recordings short (under 10 seconds)
    - Check that camera resolution is set correctly
 
 4. **"Recording doesn't start"**
+
    - Verify camera permissions are granted
    - Check that no other application is using the camera
    - Try closing other tabs that might be using the camera
@@ -214,17 +225,20 @@ Supported browsers:
 ### Browser Permissions
 
 The app requires these permissions:
+
 - Camera/webcam access
 - File download permissions
 
 ### Quality Comparison
 
 **Original Sergif (2022):**
+
 - Resolution: 360x240
 - Frame Rate: 10fps
 - Quality: Basic
 
 **Sergif 2026:**
+
 - Resolution: 1280x720 HD
 - Frame Rate: 30fps
 - Quality: High (8Mbps bitrate)
@@ -232,6 +246,7 @@ The app requires these permissions:
 ## Contributing 🤝
 
 This project was generated as a tutorial example. Feel free to:
+
 - Fork and modify for your needs
 - Submit issues for bugs
 - Suggest improvements
