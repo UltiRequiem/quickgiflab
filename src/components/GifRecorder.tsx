@@ -278,10 +278,11 @@ export default function WebcamGifRecorder() {
 						<div className="space-y-4">
 							{/* Privacy Toggle */}
 							<div className="flex items-center justify-center gap-3 p-3 bg-gray-50 rounded-lg">
-								<label className="text-sm font-medium text-gray-700">
+								<span className="text-sm font-medium text-gray-700">
 									Private
-								</label>
+								</span>
 								<Button
+									aria-label="Toggle public gallery"
 									onClick={() => setIsPublic(!isPublic)}
 									className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
 										isPublic ? "bg-indigo-600" : "bg-gray-200"
@@ -293,9 +294,9 @@ export default function WebcamGifRecorder() {
 										}`}
 									/>
 								</Button>
-								<label className="text-sm font-medium text-gray-700">
+								<span className="text-sm font-medium text-gray-700">
 									Public
-								</label>
+								</span>
 							</div>
 
 							<div className="text-xs text-center text-gray-500">

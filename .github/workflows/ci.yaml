@@ -15,9 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
-      - uses: oven-sh/setup-bun@v2
       - uses: actions/setup-node@v7
         with:
           node-version: "24"
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
+      - run: pnpm run build
+        env:
+          # read at build time by src/env.ts; dummy values are enough for CI
+          TIXTE_API_KEY: ci
+          DEFAULT_TIXTE_DOMAIN: example.com
