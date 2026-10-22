@@ -44,6 +44,7 @@ export const useWebcamGifRecorder = (
 		stream: null,
 	});
 
+	// biome-ignore lint/suspicious/noExplicitAny: RecordRTC has bad type definitions
 	const recorderRef = useRef<any>(null);
 	const startTimeRef = useRef<number>(0);
 	const intervalRef = useRef<NodeJS.Timeout | null>(null);
